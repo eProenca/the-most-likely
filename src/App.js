@@ -1,25 +1,39 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import { Routes, Route } from "react-router-dom";
+import Home from "./Home";
+import ParticipantForm from "./ParticipantForm";
+import GameScreen from "./GameScreen";
+import VotingScreen from "./VotingScreen";
 
-function App() {
+const App = () => {
+  const [participants, setParticipants] = useState([]);
+  const [usedColors, setUsedColors] = useState([]);
+
+  const addParticipant = (name, color) => {
+    setParticipants([...participants, { name, color }]);
+    setUsedColors([...usedColors, color]); // Marca a cor como usada
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Routes>
+      <Route
+        path="/"
+        element={<Home participants={participants} onRegisterParticipant={addParticipant} />}
+      />
+      <Route
+        path="/register"
+        element={<ParticipantForm onRegisterParticipant={addParticipant} usedColors={usedColors} />}
+      />
+      <Route
+        path="/game"
+        element={<GameScreen participants={participants} />}
+      />
+      <Route
+        path="/voting"
+        element={<VotingScreen participants={participants} />}
+      />
+    </Routes>
   );
-}
+};
 
 export default App;
